@@ -15,4 +15,4 @@ sed -i '$ s/.$//' memos_2sqlite.sql
 
 
 # Load data to SQLite database
-sqlite3 memos_prod.db < res.sql
+sqlite3 memos_prod.db < memos_2sqlite.sql
