@@ -1,10 +1,17 @@
-Migrate Memos database from SQLite to MySQL
+Migrate Memos database from SQLite to MySQL\
+Memos\
+https://github.com/usememos/memos
 
 The bash file is only working for version 0.21.0\
 Do not try it if you have other versions.
 
-Currently it migrates most tables from SQLite to MySQL. The instruction will be updated later.  
+The migration does not include the below tables.
+activity\
+idp\
+storage\
+system_setting\
+user_setting\
+webhook\
 
-Memos
 
-https://github.com/usememos/memos
+
