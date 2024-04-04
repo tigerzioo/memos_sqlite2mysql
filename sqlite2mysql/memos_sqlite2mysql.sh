@@ -46,6 +46,9 @@ sqlite3 memos_prod.db ".mode insert memo_relation" "select memo_id,related_memo_
 
 sqlite3 memos_prod.db ".mode insert reaction" "select id,datetime(created_ts, 'unixepoch') as created_ts,creator_id,content_id,reaction_type from reaction;" >> memos_mysql.sql
 
+sqlite3 memos_prod.db ".mode insert inbox" "SELECT id,datetime(created_ts, 'unixepoch') as created_ts,sender_id,receiver_id,status,message FROM inbox;" >> memos_mysql.sql
+
+
 if [[ "$REPLY" == 2 ]]
 then
 
