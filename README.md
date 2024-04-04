@@ -14,7 +14,7 @@ Instruction:
 5. Copy the bash file (memos_sqlite2mysql.sh) to the folder where SQLite file is located (复制Bash脚本文件到SQLite数据库文件目录下)
 6. Run the below command and follow the screen menu (运行下面的命令，按照屏幕提示选择)
 ```
-bash memos_sqlite2mysql.sh
+sudo bash memos_sqlite2mysql.sh
 ```
 \
 The migration does not include the below tables (数据导入导出不包含以下table，导完数据后请自行设置)\
