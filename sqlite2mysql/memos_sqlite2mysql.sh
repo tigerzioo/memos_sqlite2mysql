@@ -64,13 +64,13 @@ fi
 
 if [[ "$REPLY" == 3 ]]
 then
-  read -p "请输入MySQL数据库名（不填默认为memos_prod）: " mydb
+  read -p "请输入MySQL数据库名（回车默认为memos_prod）: " mydb
   if [[ -z "$mydb" ]]; then
     mydb="memos_prod"
   fi
 
 
-  read -p "请输入MySQL用户名（不填默认为root）: " myname
+  read -p "请输入MySQL用户名（回车默认为root）: " myname
   if [[ -z "$myname" ]]; then
     myname=root
   fi
