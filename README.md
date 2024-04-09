@@ -17,6 +17,11 @@ Instruction:
 ```
 sudo bash memos_sqlite2mysql.sh
 ```
+8. Run the below command if you want to import the data manually with created scripts（如果想用生成的导入脚本自己手动导入，可以运行下面这条命令）
+```
+mysql -u root -p memos_prod < memos_mysql.sql
+```
+
 \
 The migration does not include the below tables (数据导入导出不包含以下table，导完数据后请自行设置)\
 activity\
