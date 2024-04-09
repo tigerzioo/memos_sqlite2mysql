@@ -20,6 +20,8 @@ echo " "
 if [[ "$REPLY" == 1 ]]
 then
   echo "退出！"
+  echo "+++++++++++++++++++"
+  echo " "
   exit
 fi
 if [[ "$REPLY" != 2 && "$REPLY" != 3 ]]
@@ -36,7 +38,12 @@ done
   litedb="memos_prod.db"
 # fi
 
-
+if ! [ -f ./memos_prod.db ]; then
+  echo "在当前目录下没有找到文件memos_prod.db，退出脚本。"
+  echo "+++++++++++++++++++"
+  echo " "
+  exit
+fi
 
 sqlite3 "$litedb" ".mode insert user" "select id,datetime(created_ts, 'unixepoch') as created_ts,datetime(updated_ts, 'unixepoch') as updated_ts,row_status,username,role,email,nickname,password_hash,avatar_url,description from user;" > memos_mysql.sql
 
@@ -58,6 +65,7 @@ if [[ "$REPLY" == 2 ]]
 then
 
   echo "========脚本已生成，保存在当前目录，文件名为memos_mysql.sql"
+  echo "+++++++++++++++++++"
   echo " "
 fi
 
