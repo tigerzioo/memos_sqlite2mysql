@@ -1,4 +1,4 @@
-**Migrate Memos database between SQLite and MySQL**
+**Memos database migration between SQLite and MySQL**
 \
 Memos\
 https://github.com/usememos/memos
