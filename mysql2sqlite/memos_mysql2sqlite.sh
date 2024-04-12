@@ -64,7 +64,7 @@ sed -i '$ s/.$/;/' memos_2sqlite.sql
 mysqldump -u "$myname" -p"$mypass" --no-create-info --skip-triggers --compact --extended-insert=FALSE "$mydb" tag >> memos_2sqlite.sql
 
 # MEMO
-mysql -u "$myname" -p"$mypass" --disable-column-names -B -e "select 'INSERT INTO memo (id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility) VALUES' union all SELECT concat('(',id,',''',uid,''',',creator_id,',',UNIX_TIMESTAMP(created_ts),',',UNIX_TIMESTAMP(updated_ts),',''',row_status,''',''',content,''',''',visibility,'''),') as iq FROM $mydb.memo" >> memos_2sqlite.sql
+mysql -u "$myname" -p"$mypass" --disable-column-names -B -e "select 'INSERT INTO memo (id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility) VALUES' union all SELECT concat('(',id,',''',uid,''',',creator_id,',',UNIX_TIMESTAMP(created_ts),',',UNIX_TIMESTAMP(updated_ts),',''',row_status,''',''',replace(content,'''',''''''),''',''',visibility,'''),') as iq FROM $mydb.memo" >> memos_2sqlite.sql
 
 sed -i '$ s/.$/;/' memos_2sqlite.sql
 
@@ -111,6 +111,6 @@ if [[ "$REPLY" == 3 ]]
 then
   # Load data to SQLite database
   sqlite3 memos_prod.db < memos_2sqlite.sql
-
+  sqlite3 memos_prod.db "update memo set content=replace(content,'\\n',char(10));"
   sqlite3 memos_prod.db "PRAGMA wal_checkpoint(PASSIVE);" >/dev/null 2>&1 
 fi
