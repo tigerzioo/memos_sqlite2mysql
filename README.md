@@ -13,7 +13,7 @@ Instruction:
 4. The database file of SQLite should be memos_prod.db (SQLite数据库文件必需为memos_prod.db)
 5. The database name of MySQL can be typed in. The default is memos_prod (MySQL数据库名可自己输入，默认为memos_prod)
 
-***Memos SQLite to MySQL***\
+***Memos SQLite to MySQL***
 1. Copy the bash file (memos_sqlite2mysql.sh) to the folder where SQLite file is located (复制Bash脚本文件到SQLite数据库文件目录下)
 2. Run the below command and follow the screen instruction (运行下面的命令，按照屏幕提示操作)
 ```
