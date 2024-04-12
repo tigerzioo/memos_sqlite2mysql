@@ -6,7 +6,7 @@ The bash file is only working for version 0.21.0\
 Do not try it if you have other versions.\
 此Bash脚本文件只对memos 0.21.0有效（0.21.0数据库和以前版本不太一样），请不要在其他版本上运行。
 
-***Memos SQLite to MySQL
+***Memos SQLite to MySQL***
 Instruction:
 1. Please run it on the test enironment first (请先在测试环境中运行)
 2. Create the MySQL database (memos_prod) and all database structures before running the bash file (运行Bash脚本前请先创建好MySQL的数据库和所有数据库结构)
