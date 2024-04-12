@@ -24,6 +24,7 @@ sudo bash memos_sqlite2mysql.sh
 mysql -u root -p memos_prod < memos_mysql.sql
 ```
 
+
 ***Memos MySQL to SQLite***
 1. Create the SQLite empty database file memos_prod.db before running the bash file (运行Bash脚本前请先创建好SQLite的数据库文件)
 2. Copy the bash file (memos_mysql2sqlite.sh) to the folder where SQLite file is located (复制Bash脚本文件到SQLite数据库文件目录下)
