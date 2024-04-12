@@ -1,6 +1,6 @@
 **Memos Database Migration between SQLite and MySQL**
 \
-Memos\
+The migration scripts are for Memos\
 https://github.com/usememos/memos
 
 The bash file is only working for version 0.21.0\
