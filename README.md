@@ -8,20 +8,33 @@ Do not try it if you have other versions.\
 
 Instruction:
 1. Please run it on the test enironment first (请先在测试环境中运行)
-2. Create the MySQL database (memos_prod) and all database structures before running the bash file (运行Bash脚本前请先创建好MySQL的数据库和所有数据库结构)
-3. The columns orders of the tables between SQLite and MySQL need to be the same (SQLite和MySQL数据库里table的column的顺序必需是一样的)
-4. The database file of SQLite should be memos_prod.db (SQLite数据库文件必需为memos_prod.db)
-5. The database name of MySQL can be typed in. The default is memos_prod (MySQL数据库名可自己输入，默认为memos_prod)
+2. The columns orders of the tables between SQLite and MySQL need to be the same (SQLite和MySQL数据库里table的column的顺序必需是一样的)
+3. The database file of SQLite should be memos_prod.db (SQLite数据库文件必需为memos_prod.db)
+4. The database name of MySQL can be typed in. The default is memos_prod (MySQL数据库名可自己输入，默认为memos_prod)
 
 ***Memos SQLite to MySQL***
-1. Copy the bash file (memos_sqlite2mysql.sh) to the folder where SQLite file is located (复制Bash脚本文件到SQLite数据库文件目录下)
-2. Run the below command and follow the screen instruction (运行下面的命令，按照屏幕提示操作)
+1. Create the MySQL empty database with table structures before running the bash file (运行Bash脚本前请先创建好MySQL的数据库和所有数据库结构)
+2. Copy the bash file (memos_sqlite2mysql.sh) to the folder where SQLite file is located (复制Bash脚本文件到SQLite数据库文件目录下)
+3. Run the below command and follow the screen instruction (运行下面的命令，按照屏幕提示操作)
 ```
 sudo bash memos_sqlite2mysql.sh
 ```
-3. Run the below command if you want to import the data manually with generated scripts（如果想用生成的导入脚本自己手动导入，可以运行下面这条命令）
+4. Run the below command if you want to import the data manually with generated scripts（如果想用生成的导入脚本自己手动导入，可以运行下面这条命令）
 ```
 mysql -u root -p memos_prod < memos_mysql.sql
+```
+
+***Memos MySQL to SQLite***
+1. Create the SQLite empty database file memos_prod.db before running the bash file (运行Bash脚本前请先创建好SQLite的数据库文件)
+2. Copy the bash file (memos_mysql2sqlite.sh) to the folder where SQLite file is located (复制Bash脚本文件到SQLite数据库文件目录下)
+3. Run the below command and follow the screen instruction (运行下面的命令，按照屏幕提示操作)
+```
+sudo bash memos_mysql2sqlite.sh
+```
+4. Run the below command if you want to import the data manually with generated scripts（如果想用生成的导入脚本自己手动导入，可以运行下面这条命令）
+```
+sqlite3 memos_prod.db < memos_2sqlite.sql
+sqlite3 memos_prod.db "update memo set content=replace(content,'\\n',char(10));"
 ```
 
 \
