@@ -11,7 +11,7 @@ Instruction:
 2. The columns orders of the tables between SQLite and MySQL need to be the same (SQLite和MySQL数据库里table的column的顺序必需是一样的)
 3. The database file of SQLite should be memos_prod.db (SQLite数据库文件必需为memos_prod.db)
 4. The database name of MySQL can be typed in. The default is memos_prod (MySQL数据库名可自己输入，默认为memos_prod)
-
+\
 ***Memos SQLite to MySQL***
 1. Create the MySQL empty database with table structures before running the bash file (运行Bash脚本前请先创建好MySQL的数据库和所有数据库结构)
 2. Copy the bash file (memos_sqlite2mysql.sh) to the folder where SQLite file is located (复制Bash脚本文件到SQLite数据库文件目录下)
