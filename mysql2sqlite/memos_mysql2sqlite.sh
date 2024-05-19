@@ -8,14 +8,17 @@ echo "MySQL必需安装在本机，数据库名可自己输入，默认为memos_
 echo "此Bash脚本文件要和SQLite数据库文件放在同一目录下。"
 echo " "
 columns=12
+act=0
+acts=""
+v=0
+vs=""
 PS3="请选择SQLite导入方式："
 select action in "退出" "仅生成SQLite数据库的导入脚本，稍后自己手动导入" "直接导入到SQLite数据库"
 do
-  #  echo "选择的导入方式：$action"
-  #  echo "选择的序号：$REPLY"
+   # echo "选择的导入方式：$action"
+   # echo "选择的序号：$REPLY"
   echo "+++++++++++++++++++"
   echo " "
-
 
   if [[ "$REPLY" == 1 ]]
   then
@@ -28,8 +31,38 @@ do
   then
     echo "无效，请重新选择！"
   else
+    act=$REPLY
+    acts=$action
     break
   fi
+done
+
+PS3="请选择要转换的版本："
+select ver in "0.21.0" "0.22.0"  
+do
+  echo "+++++++++++++++++++"
+  echo " "
+
+  if [[ "$REPLY" != 1 && "$REPLY" != 2 ]]
+  then
+    echo "无效，请重新选择版本！"
+  else
+    v=$REPLY
+    vs=$ver
+    break
+  fi
+done
+
+echo "导入方式：$acts"
+echo "版本：$vs"
+
+while true; do
+    read -p "请确认导入方式和版本，是否继续?(y/n) " yn
+    case $yn in
+        [Yy]* ) break;; 
+        [Nn]* ) exit;;
+        * ) echo "请输入信 y(yes) or n(no).";;
+    esac
 done
 
 read -p "请输入MySQL数据库名（回车默认为memos_prod）: " mydb
@@ -60,20 +93,34 @@ mysql -u "$myname" -p"$mypass" --disable-column-names -B -e "select 'INSERT INTO
 # Replace the last comma with semi colon at the end of the file
 sed -i '$ s/.$/;/' memos_2sqlite.sql
 
-# TAG
-mysqldump -u "$myname" -p"$mypass" --no-create-info --skip-triggers --compact --extended-insert=FALSE "$mydb" tag >> memos_2sqlite.sql
-
-# MEMO
-mysql -u "$myname" -p"$mypass" --disable-column-names -B -e "select 'INSERT INTO memo (id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility) VALUES' union all SELECT concat('(',id,',''',uid,''',',creator_id,',',UNIX_TIMESTAMP(created_ts),',',UNIX_TIMESTAMP(updated_ts),',''',row_status,''',''',replace(content,'''',''''''),''',''',visibility,'''),') as iq FROM $mydb.memo" >> memos_2sqlite.sql
-
-sed -i '$ s/.$/;/' memos_2sqlite.sql
-
-# RESOURCE
-if [ $(mysql -u "$myname" -p"$mypass" $mydb -sse "select count(*) from resource;") -gt 0 ];
+if [[ "$v" == 1 ]]
 then
-  mysql -u "$myname" -p"$mypass"  --disable-column-names -B -e "select 'INSERT INTO resource (id,uid,creator_id,created_ts,updated_ts,filename,blob,external_link,type,size,internal_path,memo_id) VALUES' union all SELECT concat('(',id,',''',uid,''',',creator_id,',',UNIX_TIMESTAMP(created_ts),',',UNIX_TIMESTAMP(updated_ts),',''',filename,''',',concat('x''',hex(\`blob\`)),''',''',external_link,''',''',type,''',',size,',''',internal_path,''',',memo_id,'),') as iq FROM $mydb.resource" >> memos_2sqlite.sql
+  # TAG
+  mysqldump -u "$myname" -p"$mypass" --no-create-info --skip-triggers --compact --extended-insert=FALSE "$mydb" tag >> memos_2sqlite.sql
+
+  # MEMO
+  mysql -u "$myname" -p"$mypass" --disable-column-names -B -e "select 'INSERT INTO memo (id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility) VALUES' union all SELECT concat('(',id,',''',uid,''',',creator_id,',',UNIX_TIMESTAMP(created_ts),',',UNIX_TIMESTAMP(updated_ts),',''',row_status,''',''',replace(content,'''',''''''),''',''',visibility,'''),') as iq FROM $mydb.memo" >> memos_2sqlite.sql
 
   sed -i '$ s/.$/;/' memos_2sqlite.sql
+
+  # RESOURCE
+  if [ $(mysql -u "$myname" -p"$mypass" $mydb -sse "select count(*) from resource;") -gt 0 ];
+  then
+    mysql -u "$myname" -p"$mypass"  --disable-column-names -B -e "select 'INSERT INTO resource (id,uid,creator_id,created_ts,updated_ts,filename,blob,external_link,type,size,internal_path,memo_id) VALUES' union all SELECT concat('(',id,',''',uid,''',',creator_id,',',UNIX_TIMESTAMP(created_ts),',',UNIX_TIMESTAMP(updated_ts),',''',filename,''',',concat('x''',hex(\`blob\`)),''',''',external_link,''',''',type,''',',size,',''',internal_path,''',',memo_id,'),') as iq FROM $mydb.resource" >> memos_2sqlite.sql
+
+    sed -i '$ s/.$/;/' memos_2sqlite.sql
+  fi
+else
+  # MEMO
+  mysql -u "$myname" -p"$mypass" --disable-column-names -B -e "select 'INSERT INTO memo (id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility,tags,payload) VALUES' union all SELECT concat('(',id,',''',uid,''',',creator_id,',',UNIX_TIMESTAMP(created_ts),',',UNIX_TIMESTAMP(updated_ts),',''',row_status,''',''',replace(content,'''',''''''),''',''',visibility,''',''',tags,''',''',payload,'''),') as iq FROM $mydb.memo" >> memos_2sqlite.sql
+  sed -i '$ s/.$/;/' memos_2sqlite.sql
+
+  # RESOURCE
+  if [ $(mysql -u "$myname" -p"$mypass" $mydb -sse "select count(*) from resource;") -gt 0 ];
+  then
+    mysql -u "$myname" -p"$mypass"  --disable-column-names -B -e "select 'INSERT INTO resource (id,uid,creator_id,created_ts,updated_ts,filename,blob,type,size,memo_id,storage_type,reference,payload) VALUES' union all SELECT concat('(',id,',''',uid,''',',creator_id,',',UNIX_TIMESTAMP(created_ts),',',UNIX_TIMESTAMP(updated_ts),',''',filename,''',',concat('x''',hex(\`blob\`)),''',''',type,''',',size,',',memo_id,',''',storage_type,''',''',reference,''',''',payload,'''),') as iq FROM $mydb.resource" >> memos_2sqlite.sql
+    sed -i '$ s/.$/;/' memos_2sqlite.sql
+  fi
 fi
 
 # memo_organizer
@@ -99,7 +146,7 @@ then
 fi
 
 
-if [[ "$REPLY" == 2 ]]
+if [[ "$act" == 2 ]]
 then
   echo " "
   echo "========脚本已生成，保存在当前目录，文件名为memos_2sqlite.sql"
@@ -107,7 +154,7 @@ then
   echo " "
 fi
 
-if [[ "$REPLY" == 3 ]]
+if [[ "$act" == 3 ]]
 then
   # Load data to SQLite database
   sqlite3 memos_prod.db < memos_2sqlite.sql
