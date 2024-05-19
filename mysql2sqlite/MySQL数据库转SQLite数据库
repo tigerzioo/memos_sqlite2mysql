@@ -1,1 +1,9 @@
-
+# Remove data from SQLite
+sqlite3 memos_prod.db "delete from inbox;"
+sqlite3 memos_prod.db "delete from reaction;"
+sqlite3 memos_prod.db "delete from memo_relation;"
+sqlite3 memos_prod.db "delete from memo_organizer;"
+sqlite3 memos_prod.db "delete from resource;"
+sqlite3 memos_prod.db "delete from memo;"
+sqlite3 memos_prod.db "delete from tag;"
+sqlite3 memos_prod.db "delete from user;"
