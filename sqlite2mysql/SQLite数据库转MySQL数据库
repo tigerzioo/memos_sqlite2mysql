@@ -1,1 +1,9 @@
-
+# Remove data from MySQL
+mysql -u root -D memos21 -e "delete from user"
+mysql -u root -D memos21 -e "delete from tag"
+mysql -u root -D memos21 -e "delete from memo"
+mysql -u root -D memos21 -e "delete from resource"
+mysql -u root -D memos21 -e "delete from memo_organizer"
+mysql -u root -D memos21 -e "delete from memo_relation"
+mysql -u root -D memos21 -e "delete from reaction"
+mysql -u root -D memos21 -e "delete from inbox"
