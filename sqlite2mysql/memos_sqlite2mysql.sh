@@ -62,7 +62,7 @@ while true; do
     case $yn in
         [Yy]* ) break;; 
         [Nn]* ) exit;;
-        * ) echo "请输入信 y(yes) or n(no).";;
+        * ) echo "请输入 y(yes) or n(no).";;
     esac
 done
 
