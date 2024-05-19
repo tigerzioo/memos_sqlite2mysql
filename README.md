@@ -5,7 +5,7 @@ https://github.com/usememos/memos
 
 The bash file is only working for version 0.21.0 and 0.22.0\
 Do not try it if you have other versions.\
-此Bash脚本文件只对memos 0.21.0 和 0.22.0 有效（运行脚本时请选择对应的版本），请不要在其他版本上运行。
+此Bash脚本文件只对memos 0.21.0 和 0.22.0 有效（运行脚本时请按照提示选择对应的版本），请不要在其他版本上运行。
 
 Instruction:
 1. Please run it on the test enironment first (请先在测试环境中运行)
