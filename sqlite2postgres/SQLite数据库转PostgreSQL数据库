@@ -1,1 +1,8 @@
-
+pdb="memos_prod"
+# psql -d "$pdb" -c 'delete from "user"'
+# psql -d "$pdb" -c 'delete from memo'
+# psql -d "$pdb" -c 'delete from resource'
+# psql -d "$pdb" -c 'delete from memo_organizer'
+# psql -d "$pdb" -c 'delete from memo_relation'
+# psql -d "$pdb" -c 'delete from reaction'
+# psql -d "$pdb" -c 'delete from inbox'
