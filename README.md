@@ -9,9 +9,9 @@ Do not try it if you have other versions.\
 
 Instruction:
 1. Please run it on the test enironment first (请先在测试环境中运行)
-2. The columns orders of the tables between SQLite and MySQL need to be the same (SQLite和MySQL数据库里table的column的顺序必需是一样的)
+2. The columns orders of the tables between SQLite, MySQL and PostgreSQL need to be the same (SQLite，MySQL和PostgreSQL数据库里table的column的顺序必需是一样的)
 3. The database file of SQLite should be memos_prod.db (SQLite数据库文件必需为memos_prod.db)
-4. The database name of MySQL can be typed in. The default is memos_prod (MySQL数据库名可自己输入，默认为memos_prod)
+4. The database name of MySQL and PostgreSQL can be typed in. The default is memos_prod (MySQL和PostgreSQL数据库名可自己输入，默认为memos_prod)
 
 \
 ***Memos SQLite to MySQL***
@@ -34,7 +34,7 @@ mysql -u root -p memos_prod < memos_mysql.sql
 ```
 sudo bash memos_sqlite2postgres.sh
 ```
-4. Run the below command if you want to import the data manually with generated scripts（如果想用生成的导入脚本自己手动导入，可以运行下面这条命令）
+5. Run the below command if you want to import the data manually with generated scripts（如果想用生成的导入脚本自己手动导入，可以运行下面这条命令）
 ```
 psql -d memos_prod -U root -W < memos_2post.sql
 ```
