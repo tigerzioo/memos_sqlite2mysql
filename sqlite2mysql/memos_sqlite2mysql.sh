@@ -3,17 +3,19 @@
 echo " "
 echo " "
 echo "+++++++++++++++++ Memos SQLite 2 MySQL ++++++++++++++++++++++"
-echo "提示："
+echo "提示 (Note)："
 echo "SQLite数据库文件必需为memos_prod.db，MySQL数据库名可自己输入，默认为memos_prod。"
 echo "此Bash脚本文件要和SQLite数据库文件放在同一目录下。"
+echo "The database file of SQLite should be memos_prod.db，The database name of MySQL can be typed in. The default is memos_prod。"
+echo "This bash file should be in the folder where SQLite file is located。"
 echo " "
 columns=12
 act=0
 acts=""
 v=0
 vs=""
-PS3="请选择MySQL导入方式："
-select action in "退出" "仅生成MySQL数据库的导入脚本，稍后自己手动导入" "直接导入到MySQL数据库（数据库必须在本机才可以）"
+PS3="请选择MySQL导入方式 (Please select)："
+select action in "退出 (Exit)" "仅生成MySQL数据库的导入脚本，稍后自己手动导入 (Generate the import scripts only)" "直接导入到MySQL数据库（数据库必须在本机才可以）(Import to MySQL. MySQL need to be in the same host)"
 do
 #  echo "选择的导入方式：$action"
 #  echo "选择的序号：$REPLY"
@@ -23,14 +25,14 @@ echo " "
 
 if [[ "$REPLY" == 1 ]]
 then
-  echo "退出！"
+  echo "退出 (Exit)！"
   echo "+++++++++++++++++++"
   echo " "
   exit
 fi
 if [[ "$REPLY" != 2 && "$REPLY" != 3 ]]
 then
-  echo "无效，请重新选择！"
+  echo "无效，请重新选择 (Invalid, please select again)！"
 else
   act=$REPLY
   acts=$action
@@ -38,7 +40,7 @@ else
 fi
 done
 
-PS3="请选择要转换的版本："
+PS3="请选择要转换的版本 (Select the version)："
 select ver in "0.21.0" "0.22.0"  
 do
   echo "+++++++++++++++++++"
@@ -46,7 +48,7 @@ do
 
   if [[ "$REPLY" != 1 && "$REPLY" != 2 ]]
   then
-    echo "无效，请重新选择版本！"
+    echo "无效，请重新选择版本 (Invalid, please select the version)！"
   else
     v=$REPLY
     vs=$ver
@@ -54,11 +56,11 @@ do
   fi
 done
 
-echo "导入方式：$acts"
-echo "版本：$vs"
+echo "导入方式 (Import option)：$acts"
+echo "版本 (Version)：$vs"
 
 while true; do
-    read -p "请确认导入方式和版本，是否继续?(y/n) " yn
+    read -p "请确认导入方式和版本，是否继续 (Please confirm)?(y/n) " yn
     case $yn in
         [Yy]* ) break;; 
         [Nn]* ) exit;;
@@ -67,13 +69,13 @@ while true; do
 done
 
 
-# read -p "请输入SQLite数据库文件名（不填默认为memos_prod.db）: " litedb
+# read -p "请输入SQLite数据库文件名（不填默认为memos_prod.db）(Please enter the SQLite file name. The default is memos_prod.db): " litedb
 # if [[ -z "$litedb" ]]; then
   litedb="memos_prod.db"
 # fi
 
 if ! [ -f ./memos_prod.db ]; then
-  echo "在当前目录下没有找到文件memos_prod.db，退出脚本。"
+  echo "在当前目录下没有找到文件memos_prod.db，退出脚本 (memos_prod.db not found)。"
   echo "+++++++++++++++++++"
   echo " "
   exit
@@ -108,7 +110,7 @@ echo 'update `resource` set `blob` = unhex(`blob`) where `blob` is not null;'  >
 if [[ "$act" == 2 ]]
 then
 
-  echo "========脚本已生成，保存在当前目录，文件名为memos_mysql.sql"
+  echo "========脚本已生成，保存在当前目录，文件名为memos_mysql.sql (The scripts generated. The file name is memos_mysql.sql)"
   echo "+++++++++++++++++++"
   echo " "
 fi
@@ -116,17 +118,17 @@ fi
 
 if [[ "$act" == 3 ]]
 then
-  read -p "请输入MySQL数据库名（回车默认为memos_prod）: " mydb
+  read -p "请输入MySQL数据库名（回车默认为memos_prod）(Please enter MySQL DB name. The default is memos_prod): " mydb
   if [[ -z "$mydb" ]]; then
     mydb="memos_prod"
   fi
 
 
-  read -p "请输入MySQL用户名（回车默认为root）: " myname
+  read -p "请输入MySQL用户名（回车默认为root）(Please enter the user for MySQL. The default is root): " myname
   if [[ -z "$myname" ]]; then
     myname=root
   fi
-  echo "MySQL: $mydb"
-  echo "User: $myname"
+  echo "MySQL数据库 (DB): $mydb"
+  echo "MySQL用户名 (user): $myname"
   mysql -u "$myname" -p "$mydb" < memos_mysql.sql
 fi
