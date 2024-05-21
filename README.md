@@ -1,7 +1,7 @@
-**Memos Database Migration**
-**From SQLite to MySQL**
-**From SQLite to PostgreSQL**
-**From MySQL to SQLite**
+**Memos Database Migration**\
+**From SQLite to MySQL**\
+**From SQLite to PostgreSQL**\
+**From MySQL to SQLite**\
 \
 The migration scripts are for Memos\
 https://github.com/usememos/memos
