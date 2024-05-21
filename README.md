@@ -7,7 +7,7 @@ The migration scripts are for Memos\
 https://github.com/usememos/memos
 
 The bash file is only working for certain versions. Do not try it if you have other versions.\
-此Bash脚本文件只对特定版本有效（运行脚本时请按照提示选择对应的版本），请不要在其他版本上运行。
+此Bash脚本文件只支持特定版本的数据库转换（运行脚本时请按照提示选择对应的版本），请不要在其他版本上运行。
 
 Instruction:
 1. Please run it on the test enironment first (请先在测试环境中运行)
