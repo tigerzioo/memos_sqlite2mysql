@@ -26,6 +26,19 @@ sudo bash memos_sqlite2mysql.sh
 mysql -u root -p memos_prod < memos_mysql.sql
 ```
 \
+***Memos SQLite to PostgreSQL***
+1. Create the PostgreSQL empty database with table structures before running the bash file (运行Bash脚本前请先创建好PostgreSQL的数据库和所有数据库结构)
+2. Copy the bash file (memos_sqlite2postgres.sh) to the folder where SQLite file is located (复制Bash脚本文件到SQLite数据库文件目录下)
+3. The scripts will create a temp table in order to migrate the blob data. The temp table will be dropped after migration (为了导入附件数据，脚本会创建一个临时table，完成后会自动删除)
+4. Run the below command and follow the screen instruction (运行下面的命令，按照屏幕提示操作)
+```
+sudo bash memos_sqlite2postgres.sh
+```
+4. Run the below command if you want to import the data manually with generated scripts（如果想用生成的导入脚本自己手动导入，可以运行下面这条命令）
+```
+psql -d memos_prod -U root -W < memos_2post.sql
+```
+\
 ***Memos MySQL to SQLite***
 1. Create the SQLite empty database file memos_prod.db before running the bash file (运行Bash脚本前请先创建好SQLite的数据库文件)
 2. Copy the bash file (memos_mysql2sqlite.sh) to the folder where SQLite file is located (复制Bash脚本文件到SQLite数据库文件目录下)
