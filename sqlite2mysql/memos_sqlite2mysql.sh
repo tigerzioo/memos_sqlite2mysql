@@ -103,6 +103,8 @@ sqlite3 "$litedb" ".mode insert reaction" "select id,datetime(created_ts, 'unixe
 
 sqlite3 "$litedb" ".mode insert inbox" "SELECT id,datetime(created_ts, 'unixepoch') as created_ts,sender_id,receiver_id,status,message FROM inbox;" >> memos_mysql.sql
 
+echo 'update `resource` set `blob` = unhex(`blob`) where `blob` is not null;'  >> memos_mysql.sql
+
 if [[ "$act" == 2 ]]
 then
 
