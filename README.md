@@ -1,8 +1,8 @@
 **Memos Database Migration** (supported version)
 
-**From SQLite to MySQL** (version 0.21.0 and 0.22.0)\
-**From SQLite to PostgreSQL** (version 0.22.0)\
-**From MySQL to SQLite** (version 0.21.0 and 0.22.0)\
+**From SQLite to MySQL** (version 0.21.0 and 0.22.x[x<=1])\
+**From SQLite to PostgreSQL** (version 0.22.x[x<=1])\
+**From MySQL to SQLite** (version 0.21.0 and 0.22.x[x<=1])\
 \
 The migration scripts are for Memos\
 https://github.com/usememos/memos
