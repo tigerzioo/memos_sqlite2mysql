@@ -18,19 +18,20 @@ sudo bash memosbackup_sqlite.sh
 
 \
 **自动备份：**\
-在cron job中添加任务（建议在root下运行）
-1. 运行
+在cron job中添加任务
+1. 复制脚本文件（memosbackup_sqlite.sh）到SQLite数据库文件目录下
+2. 运行（建议在root下运行）
 ```
 crontab -e
 ```
-2. 添加下面语句到文件的最后
+3. 添加下面语句到文件的最后
 ```
 # 请自行修改脚本文件的路径
 # 此命令是每天凌晨12点时备份
 0 0 * * * bash /home/usr/.memos/memosbackup_sqlite.sh 
 ```
-3. 按 CTRL+X 退出，按 y 选择保存，按回车确认
-4. 然后不用管了，只要机器开着，每天 cron job 会自动帮你备份
+4. 按 CTRL+X 退出，按 y 选择保存，按回车确认
+5. 然后不用管了，只要机器开着，每天 cron job 会自动帮你备份
 
 \
 **cron job 自动运行时间**\
