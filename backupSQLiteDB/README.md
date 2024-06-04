@@ -28,4 +28,19 @@ crontab -e
 0 0 * * * bash /home/usr/.memos/memosbackup_sqlite.sh 
 ```
 3. 按 CTRL+X 退出，按 y 选择保存，按回车确认
-4. 然后不用管了，只要开机，每天 cron job 会自动帮你备份
+4. 然后不用管了，只要机器开着，每天 cron job 会自动帮你备份
+
+**cron job 自动运行时间**
+这个可以自己上网查查，下面给几个常用的
+```
+# 每小时备份一次
+0 * * * * bash /home/usr/.memos/memosbackup_sqlite.sh
+```
+```
+# 每6小时备份一次
+0 */6 * * * bash /home/usr/.memos/memosbackup_sqlite.sh
+```
+```
+# 每天中午12点和凌晨12点备份
+0 0,12 * * * bash /home/usr/.memos/memosbackup_sqlite.sh
+```
