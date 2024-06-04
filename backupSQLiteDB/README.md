@@ -7,9 +7,20 @@
 3. 备份文件自动添加时间后缀
 4. 自动清除超过30天的备份文件（可以自己修改脚本更改保留天数）
 
-手动运行：
+手动备份：
 1. 复制脚本文件（memosbackup_sqlite.sh）到SQLite数据库文件目录下
 2. 运行下面命令备份到当前目录下的memosbak目录
 ```
 sudo bash memosbackup_sqlite.sh
+```
+
+自动备份：
+在cron job中添加任务（建议在root下运行）
+1. 运行
+```
+crontab -e
+```
+```
+# 请自己修改脚本文件的路径
+0 0 * * * bash /home/usr/.memos/memosbackup_sqlite.sh 
 ```
