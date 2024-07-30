@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "  "
+echo " "
 echo " "
 echo "+++++++++++++++++ Memos MySQL 2 SQLite ++++++++++++++++++++++"
 echo "提示："
