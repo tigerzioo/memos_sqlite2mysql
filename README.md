@@ -19,10 +19,10 @@ Instruction:
 \
 ***Memos SQLite to MySQL***
 1. Create the MySQL empty database with table structures before running the bash file (运行Bash脚本前请先创建好MySQL的数据库和所有table结构)
-2. Copy the bash file (memos_sqlite2mysql.sh) to the folder where SQLite file is located (复制Bash脚本文件到SQLite数据库文件目录下)
+2. Enter the folder where SQLite file is located (进入到SQLite数据库文件目录下)
 3. Run the below command and follow the screen instruction (运行下面的命令，按照屏幕提示操作)
 ```
-sudo bash memos_sqlite2mysql.sh
+curl -sS -O https://raw.githubusercontent.com/tigerzioo/memos_sqlite2mysql/main/sqlite2mysql/memos_sqlite2mysql.sh && bash memos_sqlite2mysql.sh
 ```
 4. Run the below command if you want to import the data manually with generated scripts（如果想用生成的导入脚本自己手动导入，可以运行下面这条命令）
 ```
