@@ -1,5 +1,5 @@
 #!/bin/bash
-
+ 
 echo " "
 echo " "
 echo "+++++++++++++++++ Memos MySQL 2 SQLite ++++++++++++++++++++++"
