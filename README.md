@@ -19,6 +19,7 @@ Instruction:
 \
 ***Memos SQLite to MySQL***
 1. Create the MySQL empty database with table structures before running the bash file (运行Bash脚本前请先创建好MySQL的数据库和所有table结构)
+   https://github.com/tigerzioo/memos_sqlite2mysql/issues/1 (如何创建MySQL数据库看这里、instructions for creating MySQL empty database)
 2. Enter the folder where SQLite file is located (进入到SQLite数据库文件目录下)
 3. Run the below command and follow the screen instruction (运行下面的命令，按照屏幕提示操作)
 ```
@@ -31,6 +32,7 @@ mysql -u root -p memos_prod < memos_mysql.sql
 \
 ***Memos SQLite to PostgreSQL***
 1. Create the PostgreSQL empty database with table structures before running the bash file (运行Bash脚本前请先创建好PostgreSQL的数据库和所有table结构)
+   https://github.com/tigerzioo/memos_sqlite2mysql/issues/2 (如何创建PostgreSQL数据库看这里、instructions for creating PostgreSQL empty database)
 2. Enter the folder where SQLite file is located (进入到SQLite数据库文件目录下)
 3. The scripts will create a temp table in order to migrate the blob data. The temp table will be dropped after migration (为了导入附件数据，脚本会创建一个临时table，完成后会自动删除)
 4. Run the below command and follow the screen instruction (运行下面的命令，按照屏幕提示操作)
