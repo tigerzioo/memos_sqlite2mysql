@@ -43,7 +43,7 @@ done
 # exit
 
 echo "导入方式 (Import option)：$acts"
-echo "版本 (Version)：0.22.x"
+echo "版本 (Version)：0.22.x-0.23.x"
 
 while true; do
     read -p "请确认导入方式和版本，是否继续 (Please confirm)?(y/n) " yn
