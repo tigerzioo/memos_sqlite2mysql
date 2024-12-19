@@ -121,6 +121,6 @@ then
   echo "========数据转换完成（Data migration completed!）"
   echo "========请再一次输入密码重置table自动id起始值（Please re-enter the password to Set table serial column start sequence）"
   echo " "
-  psql -d "$mydb" -U "$myname" -W -c "SELECT setval('user_id_seq', COALESCE((SELECT MAX(id)+1 FROM user), 1), false);SELECT setval('memo_id_seq', COALESCE((SELECT MAX(id)+1 FROM memo), 1), false);SELECT setval('resource_id_seq', COALESCE((SELECT MAX(id)+1 FROM resource), 1), false);SELECT setval('reaction_id_seq', COALESCE((SELECT MAX(id)+1 FROM reaction), 1), false);SELECT setval('inbox_id_seq', COALESCE((SELECT MAX(id)+1 FROM inbox), 1), false);"
+  psql -d "$mydb" -U "$myname" -W -c "SELECT setval('user_id_seq', COALESCE((SELECT MAX(id)+1 FROM \"user\"), 1), false);SELECT setval('memo_id_seq', COALESCE((SELECT MAX(id)+1 FROM memo), 1), false);SELECT setval('resource_id_seq', COALESCE((SELECT MAX(id)+1 FROM resource), 1), false);SELECT setval('reaction_id_seq', COALESCE((SELECT MAX(id)+1 FROM reaction), 1), false);SELECT setval('inbox_id_seq', COALESCE((SELECT MAX(id)+1 FROM inbox), 1), false);"
 
 fi
