@@ -38,7 +38,7 @@ do
 done
 
 PS3="请选择要转换的版本："
-select ver in "0.21.0" "0.22.x"  
+select ver in "0.21.0" "0.22.x-0.23.x"  
 do
   echo "+++++++++++++++++++"
   echo " "
