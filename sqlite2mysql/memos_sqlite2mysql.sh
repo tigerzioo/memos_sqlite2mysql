@@ -41,12 +41,12 @@ fi
 done
 
 PS3="请选择要转换的版本 (Select the version)："
-select ver in "0.21.0" "0.22.x-0.23.x"  
+select ver in "0.21.0" "0.22.x-0.23.x" "0.24.0"
 do
   echo "+++++++++++++++++++"
   echo " "
 
-  if [[ "$REPLY" != 1 && "$REPLY" != 2 ]]
+  if [[ "$REPLY" != 1 && "$REPLY" != 2 && "$REPLY" != 3 ]]
   then
     echo "无效，请重新选择版本 (Invalid, please select the version)！"
   else
@@ -91,8 +91,13 @@ then
 
   sqlite3 "$litedb" ".mode insert resource" "SELECT id,uid,creator_id,datetime(created_ts, 'unixepoch') as created_ts,datetime(updated_ts, 'unixepoch') as updated_ts,filename,hex(blob),external_link,type,size,internal_path,memo_id FROM resource;" >> memos_mysql.sql
 
-else
+elif [[ "$v" == 2 ]]
+then
   sqlite3 "$litedb" ".mode insert memo" "SELECT id,uid,creator_id,datetime(created_ts, 'unixepoch') as created_ts,datetime(updated_ts, 'unixepoch') as updated_ts,row_status,content,visibility,tags,payload FROM memo;" >> memos_mysql.sql
+
+  sqlite3 "$litedb" ".mode insert resource" "SELECT id,uid,creator_id,datetime(created_ts, 'unixepoch') as created_ts,datetime(updated_ts, 'unixepoch') as updated_ts,filename,hex(blob),type,size,memo_id,storage_type,reference,payload FROM resource;" >> memos_mysql.sql
+else
+  sqlite3 "$litedb" ".mode insert memo" "SELECT id,uid,creator_id,datetime(created_ts, 'unixepoch') as created_ts,datetime(updated_ts, 'unixepoch') as updated_ts,row_status,content,visibility,pinned,payload FROM memo;" >> memos_mysql.sql
 
   sqlite3 "$litedb" ".mode insert resource" "SELECT id,uid,creator_id,datetime(created_ts, 'unixepoch') as created_ts,datetime(updated_ts, 'unixepoch') as updated_ts,filename,hex(blob),type,size,memo_id,storage_type,reference,payload FROM resource;" >> memos_mysql.sql
 fi
