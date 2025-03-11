@@ -42,8 +42,24 @@ done
 # echo $a
 # exit
 
+PS3="请选择要转换的版本 (Select the version)："
+select ver in "0.22.x-0.23.x" "0.24.0"
+do
+  echo "+++++++++++++++++++"
+  echo " "
+
+  if [[ "$REPLY" != 1 && "$REPLY" != 2 ]]
+  then
+    echo "无效，请重新选择版本 (Invalid, please select the version)！"
+  else
+    v=$REPLY
+    vs=$ver
+    break
+  fi
+done
+
 echo "导入方式 (Import option)：$acts"
-echo "版本 (Version)：0.22.x-0.23.x"
+echo "版本 (Version)：$vs"
 
 while true; do
     read -p "请确认导入方式和版本，是否继续 (Please confirm)?(y/n) " yn
@@ -62,8 +78,14 @@ sqlite3 "$litedb" ".mode insert user" "select id,created_ts,updated_ts,row_statu
 sed -i -e 's/INTO user/INTO "user"/g' memos_2post.sql
 
 # memo
-sqlite3 "$litedb" ".mode insert memo" "SELECT id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility,tags,payload FROM memo;" >> memos_2post.sql
-sed -i -e 's/char(/chr(/g' memos_2post.sql
+if [[ "$v" == 1 ]]
+then
+  sqlite3 "$litedb" ".mode insert memo" "SELECT id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility,tags,payload FROM memo;" >> memos_2post.sql
+  sed -i -e 's/char(/chr(/g' memos_2post.sql
+else
+  sqlite3 "$litedb" ".mode insert memo" "SELECT id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility,pinned,payload FROM memo;" >> memos_2post.sql
+  sed -i -e 's/char(/chr(/g' memos_2post.sql
+fi
 
 # Create a temp table in order to convert blob column in resource table
 echo 'CREATE TABLE rstemp (id integer, blobhex text);' >> memos_2post.sql
