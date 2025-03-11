@@ -83,7 +83,7 @@ then
   sqlite3 "$litedb" ".mode insert memo" "SELECT id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility,tags,payload FROM memo;" >> memos_2post.sql
   sed -i -e 's/char(/chr(/g' memos_2post.sql
 else
-  sqlite3 "$litedb" ".mode insert memo" "SELECT id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility,pinned,payload || '::jsonb' FROM memo;" >> memos_2post.sql
+  sqlite3 "$litedb" ".mode insert memo" "SELECT id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility,payload,pinned FROM memo;" >> memos_2post.sql
   sed -i -e 's/char(/chr(/g' memos_2post.sql
 fi
 
