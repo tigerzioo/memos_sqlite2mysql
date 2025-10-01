@@ -41,12 +41,12 @@ fi
 done
 
 PS3="请选择要转换的版本 (Select the version)："
-select ver in "0.21.0" "0.22.x-0.23.x" "0.24.x" "0.25.x"
+select ver in "0.21.0" "0.22.x-0.23.x" "0.24.x-0.25.x"
 do
   echo "+++++++++++++++++++"
   echo " "
 
-  if [[ "$REPLY" != 1 && "$REPLY" != 2 && "$REPLY" != 3 && "$REPLY" != 4 ]]
+  if [[ "$REPLY" != 1 && "$REPLY" != 2 && "$REPLY" != 3 ]]
   then
     echo "无效，请重新选择版本 (Invalid, please select the version)！"
   else
