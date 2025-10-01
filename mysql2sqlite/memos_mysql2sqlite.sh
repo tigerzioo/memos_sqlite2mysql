@@ -111,6 +111,7 @@ then
     sed -i '$ s/.$/;/' memos_2sqlite.sql
   fi
 elif [[ "$v" == 2 ]]
+then
   # MEMO
   mysql -u "$myname" -p"$mypass" --disable-column-names -B -e "select 'INSERT INTO memo (id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility,tags,payload) VALUES' union all SELECT concat('(',id,',''',uid,''',',creator_id,',',UNIX_TIMESTAMP(created_ts),',',UNIX_TIMESTAMP(updated_ts),',''',row_status,''',''',replace(content,'''',''''''),''',''',visibility,''',''',tags,''',''',payload,'''),') as iq FROM $mydb.memo" >> memos_2sqlite.sql
   sed -i '$ s/.$/;/' memos_2sqlite.sql
