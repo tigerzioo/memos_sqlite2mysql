@@ -38,12 +38,12 @@ do
 done
 
 PS3="请选择要转换的版本："
-select ver in "0.21.0" "0.22.x-0.23.x"  
+select ver in "0.21.0" "0.22.x-0.23.x" "0.24.x-0.25.x"
 do
   echo "+++++++++++++++++++"
   echo " "
 
-  if [[ "$REPLY" != 1 && "$REPLY" != 2 ]]
+  if [[ "$REPLY" != 1 && "$REPLY" != 2 && "$REPLY" != 3 ]]
   then
     echo "无效，请重新选择版本！"
   else
@@ -110,9 +110,20 @@ then
 
     sed -i '$ s/.$/;/' memos_2sqlite.sql
   fi
-else
+elif [[ "$v" == 2 ]]
   # MEMO
   mysql -u "$myname" -p"$mypass" --disable-column-names -B -e "select 'INSERT INTO memo (id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility,tags,payload) VALUES' union all SELECT concat('(',id,',''',uid,''',',creator_id,',',UNIX_TIMESTAMP(created_ts),',',UNIX_TIMESTAMP(updated_ts),',''',row_status,''',''',replace(content,'''',''''''),''',''',visibility,''',''',tags,''',''',payload,'''),') as iq FROM $mydb.memo" >> memos_2sqlite.sql
+  sed -i '$ s/.$/;/' memos_2sqlite.sql
+
+  # RESOURCE
+  if [ $(mysql -u "$myname" -p"$mypass" $mydb -sse "select count(*) from resource;") -gt 0 ];
+  then
+    mysql -u "$myname" -p"$mypass"  --disable-column-names -B -e "select 'INSERT INTO resource (id,uid,creator_id,created_ts,updated_ts,filename,blob,type,size,memo_id,storage_type,reference,payload) VALUES' union all SELECT concat('(',id,',''',uid,''',',creator_id,',',UNIX_TIMESTAMP(created_ts),',',UNIX_TIMESTAMP(updated_ts),',''',filename,''',',concat('x''',hex(\`blob\`)),''',''',type,''',',size,',',memo_id,',''',storage_type,''',''',reference,''',''',payload,'''),') as iq FROM $mydb.resource" >> memos_2sqlite.sql
+    sed -i '$ s/.$/;/' memos_2sqlite.sql
+  fi
+else
+  # MEMO
+  mysql -u "$myname" -p"$mypass" --disable-column-names -B -e "select 'INSERT INTO memo (id,uid,creator_id,created_ts,updated_ts,row_status,content,visibility,pinned,payload) VALUES' union all SELECT concat('(',id,',''',uid,''',',creator_id,',',UNIX_TIMESTAMP(created_ts),',',UNIX_TIMESTAMP(updated_ts),',''',row_status,''',''',replace(content,'''',''''''),''',''',visibility,''',''',pinned,''',''',payload,'''),') as iq FROM $mydb.memo" >> memos_2sqlite.sql
   sed -i '$ s/.$/;/' memos_2sqlite.sql
 
   # RESOURCE
