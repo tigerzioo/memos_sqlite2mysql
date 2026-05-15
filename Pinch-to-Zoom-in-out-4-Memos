@@ -1,0 +1,308 @@
+class Viewer {
+  constructor(wrapper, content) {
+    this.w = wrapper;
+    this.c = content;
+
+    this.w.addEventListener("wheel", this.wheel, { passive: false });
+    this.w.addEventListener("pointerdown", this.down);
+    this.w.addEventListener("pointermove", this.move);
+    this.w.addEventListener("pointerup", this.up);
+    this.w.addEventListener("pointercancel", this.up);
+
+    this.state = {
+      x: 0,
+      y: 0,
+      scale: 1,
+    };
+
+    this.input = {
+      pointers: new Map(),
+      wheel: null,
+      dirty: false,
+    };
+
+    this.scale = {
+      min: 0.5,
+      max: 8,
+    };
+
+    this.prevPan = null;
+    this.prevPinch = null;
+
+    this.tap = {
+      startX: 0,
+      startY: 0,
+      startTime: 0,
+    };
+
+    this.keep = true;
+
+    // Prevent browser gestures while preview is open
+    document.body.style.touchAction = "none";
+
+    this.loop();
+  }
+
+  down = (event) => {
+    this.c.style.willChange = "transform";
+
+    this.w.setPointerCapture(event.pointerId);
+
+    this.input.pointers.set(event.pointerId, {
+      x: event.clientX,
+      y: event.clientY,
+    });
+
+    // Save tap start info
+    this.tap.startX = event.clientX;
+    this.tap.startY = event.clientY;
+    this.tap.startTime = Date.now();
+
+    this.input.dirty = true;
+  };
+
+  move = (event) => {
+    const pointer = this.input.pointers.get(event.pointerId);
+
+    if (!pointer) return;
+
+    pointer.x = event.clientX;
+    pointer.y = event.clientY;
+
+    this.input.dirty = true;
+  };
+
+  up = (event) => {
+    this.c.style.willChange = "";
+
+    const dx = event.clientX - this.tap.startX;
+    const dy = event.clientY - this.tap.startY;
+
+    const dist = Math.hypot(dx, dy);
+    const duration = Date.now() - this.tap.startTime;
+
+    // Detect single quick tap
+    if (
+      dist < 10 &&
+      duration < 250 &&
+      this.input.pointers.size === 1
+    ) {
+      // Close dialog using Escape key
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Escape",
+          code: "Escape",
+          keyCode: 27,
+          which: 27,
+          bubbles: true,
+        })
+      );
+    }
+
+    this.input.pointers.delete(event.pointerId);
+
+    this.input.dirty = true;
+  };
+
+  wheel = (event) => {
+    event.preventDefault();
+
+    this.input.wheel = {
+      x: event.clientX,
+      y: event.clientY,
+      delta: event.deltaY,
+    };
+
+    this.input.dirty = true;
+  };
+
+  loop = () => {
+    this.update();
+
+    if (this.keep) {
+      requestAnimationFrame(this.loop);
+    } else {
+      console.log("viewer stopped");
+    }
+  };
+
+  update() {
+    if (!this.input.dirty) return;
+
+    this.input.dirty = false;
+
+    const pointers = [...this.input.pointers.values()];
+
+    // Mouse wheel zoom
+    if (this.input.wheel) {
+      const { x, y, delta } = this.input.wheel;
+
+      const scale = Math.exp(0.001 * -delta);
+
+      this.zoomAt(x, y, scale);
+
+      this.input.wheel = null;
+    }
+
+    // One finger pan
+    if (pointers.length === 1) {
+      this.pan(pointers[0]);
+    }
+
+    // Two finger pinch
+    if (pointers.length >= 2) {
+      this.pinch(pointers[0], pointers[1]);
+    }
+
+    if (pointers.length < 2) {
+      this.prevPinch = null;
+    }
+
+    if (pointers.length !== 1) {
+      this.prevPan = null;
+    }
+
+    this.render();
+  }
+
+  pan(pointer) {
+    if (!this.prevPan) {
+      this.prevPan = { ...pointer };
+      return;
+    }
+
+    this.state.x += pointer.x - this.prevPan.x;
+    this.state.y += pointer.y - this.prevPan.y;
+
+    this.prevPan = { ...pointer };
+  }
+
+  pinch(p1, p2) {
+    const center = {
+      x: (p1.x + p2.x) / 2,
+      y: (p1.y + p2.y) / 2,
+    };
+
+    const dist = Math.hypot(
+      p1.x - p2.x,
+      p1.y - p2.y
+    );
+
+    if (!this.prevPinch) {
+      this.prevPinch = {
+        center,
+        dist,
+      };
+      return;
+    }
+
+    const scale = dist / this.prevPinch.dist;
+
+    this.zoomAt(center.x, center.y, scale);
+
+    this.state.x += center.x - this.prevPinch.center.x;
+    this.state.y += center.y - this.prevPinch.center.y;
+
+    this.prevPinch = {
+      center,
+      dist,
+    };
+  }
+
+  zoomAt(x, y, scaleFactor) {
+    const rect = this.c.getBoundingClientRect();
+
+    const offsetX = x - (rect.left + rect.width / 2);
+    const offsetY = y - (rect.top + rect.height / 2);
+
+    const currentScale = this.state.scale;
+
+    const nextScale = Math.max(
+      this.scale.min,
+      Math.min(this.scale.max, currentScale * scaleFactor)
+    );
+
+    const scaleRatio = nextScale / currentScale;
+
+    this.state.x -= offsetX * (scaleRatio - 1);
+    this.state.y -= offsetY * (scaleRatio - 1);
+
+    this.state.scale = nextScale;
+  }
+
+  render() {
+    const { x, y, scale } = this.state;
+
+    this.c.style.transform =
+      `translate(${x}px, ${y}px) scale(${scale})`;
+  }
+
+  reset() {
+    this.state.x = 0;
+    this.state.y = 0;
+    this.state.scale = 1;
+
+    this.render();
+  }
+
+  destroy() {
+    this.w.removeEventListener("wheel", this.wheel);
+    this.w.removeEventListener("pointerdown", this.down);
+    this.w.removeEventListener("pointermove", this.move);
+    this.w.removeEventListener("pointerup", this.up);
+    this.w.removeEventListener("pointercancel", this.up);
+
+    this.keep = false;
+
+    document.body.style.touchAction = "";
+
+    this.w = null;
+    this.c = null;
+  }
+}
+
+let previewDialog;
+let viewer;
+
+const observer = new MutationObserver((mutations) => {
+  for (const mutation of mutations) {
+    if (mutation.type !== "childList") continue;
+
+    // Dialog added
+    mutation.addedNodes.forEach((node) => {
+      if (
+        node.nodeType === 1 &&
+        node.getAttribute("aria-describedby") ===
+          "image-preview-description"
+      ) {
+        previewDialog = node;
+
+        // Prevent scroll clipping
+        previewDialog.firstChild.style.overflow = "hidden";
+
+        const img = node.querySelector("img");
+
+        if (!img) return;
+
+        viewer = new Viewer(
+          img.parentElement,
+          img
+        );
+      }
+    });
+
+    // Dialog removed
+    mutation.removedNodes.forEach((node) => {
+      if (node === previewDialog) {
+        viewer?.destroy();
+
+        viewer = null;
+        previewDialog = null;
+      }
+    });
+  }
+});
+
+observer.observe(document.body, {
+  childList: true,
+});
